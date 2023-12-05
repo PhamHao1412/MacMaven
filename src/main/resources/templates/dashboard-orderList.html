@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+  <!-- Basic Page Needs
+  ================================================== -->
+  <title>Admin Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- CSS
+  ================================================== -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+<!--  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!--  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>-->
+<!--  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>-->
+  <link rel="stylesheet" href="/listeo/css/style.css">
+  <link rel="stylesheet" href="/listeo/css/main-color.css" id="colors">
+  <link rel="icon" href="/img/logo-3.png">
+</head>
+
+<body class="qldh">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+  <!-- Header Container
+================================================== -->
+  <header id="header-container" class="fixed fullwidth dashboard">
+
+    <!-- Header -->
+    <div id="header" class="not-sticky">
+      <div class="container">
+
+        <!-- Left Side Content -->
+        <div class="left-side">
+
+          <!-- Logo -->
+          <div id="logo">
+            <a href="index.html"><img src="images/logo.png" alt=""></a>
+            <a href="index.html" class="dashboard-logo"><img
+                    src="images/logo.png" alt="" style="width: 160px"></a>
+          </div>
+
+          <!-- Mobile Navigation -->
+          <div class="mmenu-trigger">
+            <button class="hamburger hamburger--collapse" type="button">
+								<span class="hamburger-box"> <span
+                                        class="hamburger-inner"></span>
+								</span>
+            </button>
+          </div>
+
+        </div>
+        <!-- Left Side Content / End -->
+
+        <!-- Right Side Content / End -->
+        <div class="right-side">
+          <!-- Header Widget -->
+          <div class="header-widget">
+
+            <!-- User Menu -->
+            <div class="user-menu">
+              <div class="user-name">
+                <span><img th:src="${session.admin.avatar}" alt=""></span>My
+                Account
+              </div>
+              <ul>
+                <li><a th:href="@{/dashboard}"><i
+                        class="sl sl-icon-settings"></i> Dashboard</a></li>
+                <li><a th:href="@{/dashboard-myprofile}"><i
+                        class="sl sl-icon-envelope-open"></i> My Profile</a></li>
+                <li><a th:href="@{/dashboard-orders}"><i
+                        class="fa fa-calendar-check-o"></i> Orders</a></li>
+                <li><a th:href="@{/logout-admin}"><i
+                        class="sl sl-icon-power"></i> Logout</a></li>
+              </ul>
+            </div>
+
+            <a th:href="@{/dashboard-addproduct}"
+               class="button border with-icon">Add Product<i
+                    class="sl sl-icon-plus"></i></a>
+          </div>
+          <!-- Header Widget / End -->
+        </div>
+        <!-- Right Side Content / End -->
+
+      </div>
+    </div>
+    <!-- Header / End -->
+
+  </header>
+  <div class="clearfix"></div>
+  <!-- Header Container / End -->
+
+
+  <!-- Dashboard -->
+  <div id="dashboard">
+
+    <!-- Navigation
+================================================== -->
+
+    <!-- Responsive Navigation Trigger -->
+    <a href="#" class="dashboard-responsive-nav-trigger"><i
+            class="fa fa-reorder"></i> Dashboard Navigation</a>
+    <div class="dashboard-nav">
+      <div class="dashboard-nav-inner">
+
+<!--        <ul data-submenu-title="Main">-->
+<!--          <li class="active"><a th:href="@{/dashboard}"><i class="sl sl-icon-settings"></i> Dashboard</a></li>-->
+<!--          <li class="orders"><a href="#"><i class="fa fa-calendar-check-o"></i> Orders</a>-->
+<!--            <ul class="sub-menu">-->
+<!--              <li><a th:href="@{/dashboard-orderList/{status}(status='Đơn hàng mới')}">New Orders</a></li>-->
+<!--              <li><a th:href="@{/dashboard-orderList/{status}(status='Đang xử lý')}">Processing Orders</a></li>-->
+<!--              <li><a th:href="@{/dashboard-orderList/{status}(status='Hoàn thành')}">Completed Orders</a></li>-->
+<!--            </ul>-->
+<!--          </li>-->
+<!--          <li><a th:href="@{/dashboard-wallet}"><i class="sl sl-icon-wallet"></i> Wallet</a></li>-->
+<!--        </ul>-->
+
+        <ul data-submenu-title="Main">
+          <li class="active"><a th:href="@{/dashboard}"><i class="sl sl-icon-settings"></i> Dashboard</a></li>
+          <li class="orders"><a href="#" onclick="toggleSubMenu('orderSubMenu')"><i class="fa fa-calendar-check-o"></i> Orders</a>
+            <ul class="sub-menu" id="orderSubMenu">
+              <li><a th:href="@{/dashboard-orderList/{status}(status='Đơn hàng mới')}">New Orders</a></li>
+              <li><a th:href="@{/dashboard-orderList/{status}(status='Đang xử lý')}">Processing Orders</a></li>
+              <li><a th:href="@{/dashboard-orderList/{status}(status='Hoàn thành')}">Completed Orders</a></li>
+            </ul>
+          </li>
+          <li><a th:href="@{/dashboard-wallet}"><i class="sl sl-icon-wallet"></i> Wallet</a></li>
+        </ul>
+
+
+        <ul data-submenu-title="Products">
+          <li><a th:href="@{/dashboard-myproducts}"><i
+                  class="sl sl-icon-layers"></i> My products</a></li>
+          <li><a th:href="@{/dashboard-addproduct}"><i
+                  class="sl sl-icon-plus"></i> Add Product</a></li>
+        </ul>
+
+        <ul data-submenu-title="Account">
+          <li><a th:href="@{/dashboard-myprofile}"><i
+                  class="sl sl-icon-user"></i> My Profile</a></li>
+          <li><a th:href="@{/logout-admin}"><i
+                  class="sl sl-icon-power"></i> Logout</a></li>
+        </ul>
+        <ul data-submenu-title="">
+          <li><a th:href="@{/home}"><i class="im im-icon-Home"></i>
+            Go To Home Page</a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- Navigation / End -->
+
+
+    <!-- Content
+================================================== -->
+    <div class="dashboard-content" style="margin-bottom: 70px;">
+
+      <!-- Titlebar -->
+      <div id="titlebar">
+        <div class="row">
+          <div class="col-md-12">
+            <h2>Orders</h2>
+            <!-- Breadcrumbs -->
+            <nav id="breadcrumbs">
+              <ul>
+                <li><a href="#">Home</a></li>
+                <li>Dashboard</li>
+                <li>Wallet</li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="container-xl">
+        <div class="table-responsive">
+          <div class="table-wrapper">
+            <div class="table-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h2><b>Danh sách <span th:text="${#strings.substring(titleOrder, 0, 1).toLowerCase()}"></span><span th:text="${#strings.substring(titleOrder, 1)}"></span></b></h2>
+                </div>
+                <div class="col-sm-6">
+                  <a href="#" class="btn btn-danger" onclick="deleteSelectedItems()"><i class="material-icons">&#xE15C;</i> <span>Xóa</span></a>
+                </div>
+              </div>
+            </div>
+            <table class="table table-striped table-hover">
+              <thead>
+              <tr>
+                <th>
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="selectAll">
+                                        <label for="selectAll"></label>
+                                    </span>
+                </th>
+                <th>Mã đơn</th>
+                <th>Họ tên</th>
+                <th>Điện thoại</th>
+                <th>Ngày đặt</th>
+                <th>Trạng thái</th>
+                <th>Tổng tiền</th>
+                <th>Tác vụ</th>
+              </tr>
+              </thead>
+              <tbody>
+
+              <tr th:each="orderList :${orderList}">
+
+                <td>
+                        <span class="custom-checkbox">
+                             <input type="checkbox" id="checkbox" name="options[]" value="orderList.id" >
+                              <label for="checkbox"></label>
+                        </span>
+                </td>
+
+                <td th:text="${orderList.id}"></td>
+                <td th:text="${orderList.user.user_Name}"></td>
+                <td th:text="${orderList.phone}"></td>
+                <td th:text="${orderList.booking_Date}"></td>
+                <td>
+                  <div class="status-badge" th:text="${orderList.status}" th:classappend="${orderList.status eq 'Đơn hàng mới'} ? 'new-status' : (${orderList.status eq 'Đang xử lý'} ? 'processing-status' : 'completed-status')"></div>
+                </td>
+                <td style="color:#ff3737; font-weight: 800;" th:utext=" ${#numbers.formatDecimal(orderList.total, 0, 'COMMA', 0, 'POINT')} +'&#8363;' "></td>
+                <td>
+                  <a th:href="@{/dashboard-orderDetail/{id}(id=${orderList.id})}" class="edit" th:data-order-id="${orderList.id}">
+                    <i class="material-icons" title="Edit">&#xE254;</i>
+                  </a>
+                  <a id="deleteLink" href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                </td>
+<!--                <td>-->
+<!--                  <div>-->
+<!--                    <span class="unread-dot" th:classappend="${orderList.isRead} ? 'hide-dot' : ''"></span>-->
+<!--                  </div>-->
+<!--                </td>-->
+              </tr>
+              </tbody>
+<!--              <div id="deleteEmployeeModal" class="modal fade">-->
+<!--                <div class="modal-dialog">-->
+<!--                  <div class="modal-content">-->
+<!--                    <form>-->
+<!--                      <div class="modal-header">-->
+<!--                        <h4 class="modal-title">Xóa đơn hàng</h4>-->
+<!--                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+<!--                      </div>-->
+<!--                      <div class="modal-body">-->
+<!--                        <p>Bạn có muốn xóa đơn hàng @item.Madon ? </p>-->
+<!--                        <p class="text-warning"><small>Hành động này không thể được hoàn tác.</small></p>-->
+<!--                      </div>-->
+<!--                      <div class="modal-footer">-->
+<!--                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Đóng">-->
+<!--                        <input type="submit" class="btn btn-danger" value="Xóa">-->
+<!--                      </div>-->
+<!--                    </form>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- Content / End -->
+
+
+  </div>
+  <!-- Dashboard / End -->
+
+
+</div>
+<!-- Wrapper / End -->
+
+
+<!-- Scripts
+================================================== -->
+<script type="text/javascript"
+        src="scripts/jquery-migrate-3.3.2.min.js"></script>
+<script type="text/javascript" src="scripts/mmenu.min.js"></script>
+<script type="text/javascript" src="scripts/chosen.min.js"></script>
+<script type="text/javascript" src="scripts/slick.min.js"></script>
+<script type="text/javascript" src="scripts/rangeslider.min.js"></script>
+<script type="text/javascript" src="scripts/magnific-popup.min.js"></script>
+<script type="text/javascript" src="scripts/waypoints.min.js"></script>
+<script type="text/javascript" src="scripts/counterup.min.js"></script>
+<script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
+<script type="text/javascript" src="scripts/tooltips.min.js"></script>
+<script type="text/javascript" src="scripts/custom.js"></script>
+
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI/tZ1aX24E6C0F4F3d07PindHxVpASD2HdS9iDk="
+        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  function toggleSubMenu(subMenuId) {
+    var subMenu = $('#' + subMenuId);
+    subMenu.toggleClass('active');
+  }
+</script>
+
+
+
+<script>
+  $(document).ready(function() {
+    $('.edit').click(function() {
+      var orderId = $(this).data('order-id');
+      $.ajax({
+        url: '/admin/updateIsRead',
+        type: 'POST',
+        data: {
+          orderId: orderId
+        },
+        success: function(response) {
+          // Xử lý thành công khi gọi hàm updateStatus
+        },
+        error: function(xhr, status, error) {
+          // Xử lý lỗi khi gọi hàm updateStatus
+        }
+      });
+    });
+  });
+
+</script>
+
+
+<style>
+  .sub-menu {
+    display: none;
+  }
+
+  .sub-menu.active {
+    display: block;
+  }
+  read-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #007bff; /* Màu xanh dương */
+    border-radius: 50%;
+  }
+
+  .hide-dot {
+    display: none;
+  }
+  .status-badge {
+    color: white;
+    font-weight: 700;
+    width: 115px;
+    text-align: center;
+    border-radius: 10px;
+  }
+
+  .new-status {
+    background: #6a9ed6;
+  }
+
+  .processing-status {
+    background: #e6c94b;
+  }
+
+  .completed-status {
+    background: #59c959;
+  }
+
+
+  .qldh {
+    color: #566787;
+    background: #f5f5f5;
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 15px;
+  }
+
+  .table-responsive {
+    margin: 30px 0;
+  }
+
+  .table-wrapper {
+    background: #fff;
+    padding: 20px 25px;
+    border-radius: 3px;
+    min-width: 1000px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  }
+
+  .table-title {
+    padding-bottom: 15px;
+    background: #435d7d;
+    color: #fff;
+    padding: 16px 30px;
+    min-width: 100%;
+    margin: -20px -25px 10px;
+    border-radius: 3px 3px 0 0;
+  }
+
+  .table-title h2 {
+    margin: 5px 0 0;
+    font-size: 24px;
+  }
+
+  .table-title .btn-group {
+    float: right;
+  }
+
+  .table-title .btn {
+    color: #fff;
+    float: right;
+    font-size: 13px;
+    border: none;
+    min-width: 50px;
+    border-radius: 2px;
+    border: none;
+    outline: none !important;
+    margin-left: 10px;
+  }
+
+  .table-title .btn i {
+    float: left;
+    font-size: 21px;
+    margin-right: 5px;
+  }
+
+  .table-title .btn span {
+    float: left;
+    margin-top: 2px;
+  }
+
+  table.table tr th, table.table tr td {
+    border-color: #e9e9e9;
+    padding:12px 15px;
+    vertical-align: middle;
+  }
+
+  table.table tr th:first-child {
+    width: 60px;
+  }
+
+  table.table tr th:last-child {
+    width: 100px;
+  }
+
+  table.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #fcfcfc;
+  }
+
+  table.table-striped.table-hover tbody tr:hover {
+    background: #f5f5f5;
+  }
+
+  table.table th i {
+    font-size: 13px;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+
+  table.table td:last-child i {
+    opacity: 0.9;
+    font-size: 22px;
+    margin: 0 5px;
+  }
+
+  table.table td a {
+    font-weight: bold;
+    color: #566787;
+    display: inline-block;
+    text-decoration: none;
+    outline: none !important;
+  }
+
+  table.table td a:hover {
+    color: #2196F3;
+  }
+
+  table.table td a.edit {
+    color: #FFC107;
+  }
+
+  table.table td a.delete {
+    color: #F44336;
+  }
+
+  table.table td i {
+    font-size: 19px;
+  }
+
+  table.table .product_image {
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+
+  .pagination {
+    float: right;
+    margin: 0 0 5px;
+  }
+
+  .pagination li a {
+    border: none;
+    font-size: 13px;
+    min-width: 30px;
+    min-height: 30px;
+    color: #999;
+    margin: 0 2px;
+    line-height: 30px;
+    border-radius: 2px !important;
+    text-align: center;
+    padding: 0 6px;
+  }
+
+  .pagination li a:hover {
+    color: #666;
+  }
+
+  .pagination li.active a, .pagination li.active a.page-link {
+    background: #03A9F4;
+  }
+
+  .pagination li.active a:hover {
+    background: #0397d6;
+  }
+
+  .pagination li.disabled i {
+    color: #ccc;
+  }
+
+  .pagination li i {
+    font-size: 16px;
+    padding-top: 6px
+  }
+
+  .hint-text {
+    float: left;
+    margin-top: 10px;
+    font-size: 13px;
+  }
+  /* Custom checkbox */
+  .custom-checkbox {
+    position: relative;
+  }
+
+  .custom-checkbox input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    margin: 5px 0 0 3px;
+    z-index: 9;
+  }
+
+  .custom-checkbox label:before {
+    width: 18px;
+    height: 18px;
+  }
+
+  .custom-checkbox label:before {
+    content: '';
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: text-top;
+    background: white;
+    border: 1px solid #bbb;
+    border-radius: 2px;
+    box-sizing: border-box;
+    z-index: 2;
+  }
+
+  .custom-checkbox input[type="checkbox"]:checked + label:after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 3px;
+    width: 6px;
+    height: 11px;
+    border: solid #000;
+    border-width: 0 3px 3px 0;
+    transform: inherit;
+    z-index: 3;
+    transform: rotateZ(45deg);
+  }
+
+  .custom-checkbox input[type="checkbox"]:checked + label:before {
+    border-color: #03A9F4;
+    background: #03A9F4;
+  }
+
+  .custom-checkbox input[type="checkbox"]:checked + label:after {
+    border-color: #fff;
+  }
+
+  .custom-checkbox input[type="checkbox"]:disabled + label:before {
+    color: #b8b8b8;
+    cursor: auto;
+    box-shadow: none;
+    background: #ddd;
+  }
+  /* Modal styles */
+  .modal .modal-dialog {
+    max-width: 400px;
+  }
+
+  .modal .modal-header, .modal .modal-body, .modal .modal-footer {
+    padding: 20px 30px;
+  }
+
+  .modal .modal-content {
+    border-radius: 3px;
+    font-size: 14px;
+  }
+
+  .modal .modal-footer {
+    background: #ecf0f1;
+    border-radius: 0 0 3px 3px;
+  }
+
+  .modal .modal-title {
+    display: inline-block;
+  }
+
+  .modal .form-control {
+    border-radius: 2px;
+    box-shadow: none;
+    border-color: #dddddd;
+  }
+
+  .modal textarea.form-control {
+    resize: vertical;
+  }
+
+  .modal .btn {
+    border-radius: 2px;
+    min-width: 100px;
+  }
+
+  .modal form label {
+    font-weight: normal;
+  }
+  td[th\:utext*="&#8363;"] {
+    font-size: 20px; /* Điều chỉnh kích thước theo ý muốn */
+    /* Các thuộc tính CSS khác nếu cần */
+  }
+</style>
