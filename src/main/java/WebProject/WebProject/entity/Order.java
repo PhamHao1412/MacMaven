@@ -1,6 +1,7 @@
 package WebProject.WebProject.entity;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +38,7 @@ public class Order {
 	private int total;
 	
 	@Column(name = "booking_Date")
-	private Date booking_Date;
+	private LocalDate booking_Date;
 	
 	@Column(name = "payment_Method", columnDefinition = "nvarchar(1111)")
 	private String payment_Method;

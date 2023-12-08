@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống kê doanh thu</title>
+
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Thống kê doanh thu</h1>
+
+    <form action="/admin/thongke" method="get" class="mb-3">
+        <div class="form-row">
+            <div class="col">
+                <label for="start">Ngày bắt đầu:</label>
+                <input type="date" id="start" name="start" class="form-control" required>
+            </div>
+            <div class="col">
+                <label for="end">Ngày kết thúc:</label>
+                <input type="date" id="end" name="end" class="form-control" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Thực hiện thống kê</button>
+    </form>
+
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Ngày</th>
+            <th scope="col">Tổng doanh thu</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Sử dụng Thymeleaf để lặp qua danh sách revenueStatics và hiển thị thông tin thống kê -->
+        <tr th:each="revenueStatic : ${revenueStatics}">
+            <td th:text="${#temporals.format(revenueStatic.startDate, 'dd/MM/yyyy')}"></td>
+
+            <td th:if="${revenueStatic.totalQuantity == null}" th:text="-"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Include Bootstrap JS and Popper.js (if needed) -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

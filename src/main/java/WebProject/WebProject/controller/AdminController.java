@@ -2,6 +2,7 @@ package WebProject.WebProject.controller;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Iterator;
@@ -10,37 +11,22 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import WebProject.WebProject.entity.*;
+import WebProject.WebProject.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import WebProject.WebProject.entity.Category;
-import WebProject.WebProject.entity.Order;
-import WebProject.WebProject.entity.Order_Item;
-import WebProject.WebProject.entity.Product;
-import WebProject.WebProject.entity.ProductImage;
-import WebProject.WebProject.entity.User;
 import WebProject.WebProject.model.Mail;
-import WebProject.WebProject.service.CategoryService;
-import WebProject.WebProject.service.CloudinaryService;
-import WebProject.WebProject.service.MailService;
-import WebProject.WebProject.service.OrderService;
-import WebProject.WebProject.service.Order_ItemService;
-import WebProject.WebProject.service.ProductImageService;
-import WebProject.WebProject.service.ProductService;
-import WebProject.WebProject.service.UserService;
 
 @Controller
 public class AdminController {
@@ -570,5 +556,40 @@ public class AdminController {
 		order.setStatus(status);
 		orderService.saveOrder(order);
 		return ResponseEntity.ok("Order is updated successfully");
+	}
+	@Controller
+	@RequestMapping("/admin")
+	public class ThongKeController {
+		@Autowired
+		private RevenueService revenueService;
+
+		@GetMapping("/thongke")
+		public String ThongKeDoanhThu(Model model,
+									  @RequestParam(value = "start", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
+									  @RequestParam(value = "end", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
+			// If start or end is not provided in the request, set default values to the current date
+			// If start or end is not provided in the request, set default values to the current date
+			if (start == null) {
+				start = LocalDate.now();
+			}
+			if (end == null) {
+				end = LocalDate.now();
+			}
+
+
+			// Check if end is not earlier than start
+			if (end.isBefore(start)) {
+				// Swap start and end if necessary
+				LocalDate temp = start;
+				start = end;
+				end = temp;
+			}
+
+			List<RevenueStatic> revenueStatics = revenueService.getRevenueStaticsInDateRangeAndStatus(start, end);
+
+			model.addAttribute("revenueStatics", revenueStatics);
+
+			return "admin/thongke";
+		}
 	}
 }

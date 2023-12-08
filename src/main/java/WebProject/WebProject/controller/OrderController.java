@@ -96,7 +96,7 @@ public class OrderController {
 		int Total = Integer.parseInt(a);
 		String status = "Pending";
 		String payment_method = null;
-		if (payOndelivery == true) {
+		if (payOndelivery) {
 			payment_method = "Pay on Delivery";
 		} else {
 			payment_method = "Pay with Momo";
@@ -104,7 +104,7 @@ public class OrderController {
 		Order newOrder = new Order();
 		newOrder.setTotal(Total);
 		newOrder.setAddress(address);
-		newOrder.setBooking_Date(booking_date);
+		newOrder.setBooking_Date(booking_date.toLocalDate());
 		newOrder.setCountry(country);
 		newOrder.setEmail(email);
 		newOrder.setFullname(fullname);
